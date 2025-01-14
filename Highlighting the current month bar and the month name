@@ -1,0 +1,115 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "data": {"name": "dataset"},
+  "config": {
+    "axis": {
+      "domain": false,
+      "grid": false,
+      "ticks": false
+    },
+    "view": {
+      "stroke": null  // Remove the light grey border
+    }
+  },
+  "title": {
+    "text": "Total Student Count by Month",
+    "anchor": "start",
+    "fontSize": 16,
+    "fontWeight": "bold",
+    "color": "blue"
+  },
+  "layer": [
+    {
+      "mark": {
+        "type": "bar",
+        "cornerRadiusBottomRight": 4,
+        "cornerRadiusTopRight": 4,
+        "cornerRadiusBottomLeft": 4,
+        "cornerRadiusTopLeft": 4,
+        "stroke": "lightgray",
+        "strokeWidth": 1,
+        "size": 30
+      },
+      "encoding": {
+        "x": {
+          "field": "MonthShortName",
+          "type": "nominal",
+          "sort": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+          "axis": {
+            "domain": false,
+            "title": null,
+            "labelAngle": 0,
+            "labelFontSize": 12,
+            "ticks": false,
+            "labelPadding": 10,
+            "labelColor": {
+              "condition": {
+                "test": "datum.value === 'Dec'",
+                "value": "blue"
+              },
+              "value": "lightgrey"
+            },
+            "labelFontWeight": {
+              "condition": {
+                "test": "datum.value === 'Dec'",
+                "value": "bold"
+              },
+              "value": "normal"
+            }
+          },
+          "bandPosition": 0.75,
+          "scale": {"paddingInner": 0.4, "paddingOuter": 0.4}
+        },
+        "y": {
+          "field": "TotalStudentCount",
+          "type": "quantitative",
+          "axis": {
+            "domain": false,
+            "title": null,
+            "grid": false,
+            "ticks": false,
+            "labelFontSize": 12,
+            "labels": false  // Remove the labels on the y-axis
+          }
+        },
+        "color": {
+          "condition": [
+            {"test": "datum['MonthShortName'] === 'Dec'", "value": "#0047ab"}
+          ],
+          "value": "#F2F5F7"
+        }
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "align": "center",
+        "baseline": "top",
+        "dy": 8,
+        "dx": -8, //x-position of labels for bars
+        "fontSize": 10
+      },
+      "encoding": {
+        "x": {
+          "field": "MonthShortName",
+          "type": "nominal",
+          "sort": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+          "bandPosition": 0.75
+        },
+        "y": {
+          "field": "TotalStudentCount",
+          "type": "quantitative",
+          "stack": "zero"
+        },
+        "text": {"field": "TotalStudentCount", "type": "quantitative"},
+        "color": {
+          "condition": {
+            "test": "datum['MonthShortName'] === 'Dec'",
+            "value": "white"  // Changed the font color for December's student count to white
+          },
+          "value": "lightgrey"
+        }
+      }
+    }
+  ]
+}
