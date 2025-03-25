@@ -1,0 +1,210 @@
+{
+  "title": {
+    "text": "INCIDENTS BY WEEKDAY AND HOUR (Day Shift)",
+    "anchor": "start",
+    "align": "left",
+    "font": "Verdana",
+    "fontSize": 20,
+    "fontWeight": "bold",
+    "offset": 10,
+    "subtitle": "Are there more incidents on certain days or particular time?",
+    "subtitleFont": "Verdana",
+    "subtitleFontSize": 16,
+    "subtitleFontWeight": "normal",
+    "subtitleFontStyle": "normal",
+    "subtitleColor": "grey",
+    "subtitlePadding": 10
+  },
+  "autosize": {
+    "type": "fit",
+    "resize": true,
+    "contains": "padding"
+  },
+  "data": {"name": "dataset"},
+  "transform": [
+    {
+      "calculate": "datum['__selected__'] == 'off' ? 0 : datum['Messages']",
+      "as": "Messages Selected"
+    }
+  ],
+  "resolve": {
+    "scale": {"color": "independent"}
+  },
+  "vconcat": [
+    {
+      "hconcat": [
+        {
+          "name": "Main matrix",
+          "mark": {
+            "type": "rect",
+            "tooltip": true,
+            "stroke": null
+          },
+          "width": {"step": 31},  // Ensure the same step size for both the x-axis and marginal bars
+          "height": {"step": 31},  // Ensure the same step size for both the y-axis and marginal bars
+          "encoding": {
+            "x": {
+              "field": "TimeLabel",
+              "sort": null,
+              "title": null,
+              "axis": {
+                "domain": false,
+                "grid": false,
+                "orient": "top",
+                "ticks": false,
+                "labelFontSize": 14,
+                "labelPadding": 10  // Add padding to space labels from heatmap
+              }
+            },
+            "y": {
+              "field": "ShortDayName",
+              "sort": null,
+              "title": null,
+              "axis": {
+                "domain": false,
+                "grid": false,
+                "ticks": false,
+                "labelFontSize": 14,
+                "labelPadding": 10  // Add padding to space labels from heatmap
+              }
+            },
+            "fill": {
+              "field": "Total Incidents by Selected Year",
+              "type": "quantitative",
+              "legend": null,
+              "scale": {
+                "range": ["#D5E9F9", "#25476E"]
+              }
+            },
+            "opacity": {
+              "condition": {
+                "test": {"field": "__selected__", "equal": "off"},
+                "value": 0.3
+              },
+              "value": 1
+            }
+          }
+        },
+        {
+          "name": "Marginal bars (row)",
+          "width": 100,
+          "height": 220, // Match the step size of the main heatmap for alignment
+          "mark": {
+            "type": "bar",
+            "height": {"band": 0.9},
+            "tooltip": true,
+            "stroke": null,
+            "strokeWidth": 0
+                     },
+          "encoding": {
+            "y": {
+              "field": "ShortDayName",
+              "sort": null,
+              "axis": null
+            },
+            "x": {
+              "field": "Total Incidents by Selected Year",
+              "type": "quantitative",
+              "aggregate": "sum",
+              "title": null,
+              "axis": {
+                "grid": false,
+                "ticks": false,
+                "labels": false,
+                "domain": false
+              }
+            },
+            "color": {
+              "field": "Total Incidents by Selected Year",
+              "type": "quantitative",
+              "aggregate": "sum",
+              "legend": null,
+              "scale": {
+                "range": ["#D7C1D9", "#4D3250"]
+              }
+            },
+            "tooltip": [
+              {"field": "ShortDayName", "title": null},
+              {"field": "Messages", "aggregate": "sum"},
+              {
+                "field": "Total Incidents by Selected Year",
+                "aggregate": "sum",
+                "title": null,
+                "formatType": "pbiFormat",
+                "format": "#,0"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "hconcat": [
+        {
+          "name": "Marginal bars (col)",
+          "height": 100,
+          "width": 405,//{"step": 20},  // Match the step size of the main heatmap for alignment
+          "mark": {
+            "type": "bar",
+            "width": {"band": 0.9},
+            "tooltip": true,
+            "stroke": null,
+            "strokeWidth":0
+            
+          },
+          "encoding": {
+            "x": {
+              "field": "TimeLabel",
+              "sort": null,
+              "axis": {
+              "grid": false,    // Remove the grid lines
+              "domain": false,  // Remove the domain line
+                "ticks": false,
+                "labels": false,
+                "title": null
+              }
+            },
+            "y": {
+              "field": "Total Incidents by Selected Year",
+              "type": "quantitative",
+              "aggregate": "sum",
+              "scale": {"reverse": true},
+              "title": null,
+              "axis": {
+                "grid": false,
+                "domain": false,
+                "ticks": false,
+                "labels": false
+              }
+            },
+            "color": {
+              "field": "Total Incidents by Selected Year",
+              "type": "quantitative",
+              "aggregate": "sum",
+              "legend": null,
+              "scale": {
+                "range": ["#D7C1D9", "#4D3250"]
+              }
+            },
+            "tooltip": [
+              {"field": "TimeLabel", "title": null},
+              {"field": "Total Incidents by Selected Year", "aggregate": "sum"},
+              {
+                "field": "Total Incidents by Selected Year",
+                "aggregate": "sum",
+                "title": null,
+                "formatType": "pbiFormat",
+                "format": "#,0"
+             }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "config": {
+    "view": {
+      "stroke": "transparent"  // Remove plot border
+    }
+  }
+}
